@@ -1,6 +1,8 @@
 package com.microsoft.codepush.react;
 
 import android.os.Build;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 
 import org.json.JSONObject;
 
@@ -165,7 +167,7 @@ public class CodePushUpdateManager {
 
         // Download the file while checking if it is a zip and notifying client of progress.
         try {
-            URL downloadUrl = new URL(downloadUrlString);
+            URL downloadUrl = Urls.create(downloadUrlString, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             connection = (HttpURLConnection) (downloadUrl.openConnection());
 
             if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP &&
@@ -351,7 +353,7 @@ public class CodePushUpdateManager {
         FileOutputStream fos = null;
         BufferedOutputStream bout = null;
         try {
-            downloadUrl = new URL(remoteBundleUrl);
+            downloadUrl = Urls.create(remoteBundleUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
             connection = (HttpURLConnection) (downloadUrl.openConnection());
             bin = new BufferedInputStream(connection.getInputStream());
             File downloadFile = new File(getCurrentPackageBundlePath(bundleFileName));
